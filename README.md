@@ -11,22 +11,22 @@
 </p>
 
 <p align="center">
-  <img src="assets/screencapture-rocketseat-devops-challenge-02.png" alt="Desafio Rocketseat Notion" width="800"/>
+  <img src="assets/screencapture-rocketseat-devops-challenge-02.png" alt="Rocketseat Challenge Notion Screenshot" width="800"/>
 </p>
 
 ---
 
-> **ℹ️ Atenção (Windows):**  
-> Você **NÃO precisa usar `chmod`** (não existe em PowerShell/CMD)!  
-> Apenas salve todos os arquivos `.sh` (principalmente `init-db.sh`) como texto puro (`LF`) no VSCode, Notepad++ ou similar.  
-> O Docker fará o script rodar corretamente dentro do container Linux.  
-> Em sistemas Linux/macOS, siga normalmente as instruções do README.
+> **ℹ️ Note for Windows users:**  
+> You **do NOT need to run `chmod`** (it's not available in PowerShell/CMD)!  
+> Just save all `.sh` files (especially `init-db.sh`) as plain text files with LF (Unix) line endings in VSCode, Notepad++, or similar.  
+> Docker will correctly execute the script inside the Linux container.  
+> On Linux/macOS, follow the standard README instructions.
 
 ---
 
 # 🐳 Docker Compose Environment Setup
 
-<em>An extensively documented, secure, and scalable multi-container environment with Node.js and PostgreSQL using Docker Compose — perfect for local development, study, or production initiation.</em>
+<em>An extensively documented, secure, and scalable multi-container environment with Node.js and PostgreSQL using Docker Compose — perfect for local development, study, or production deployment.</em>
 
 ---
 
@@ -40,7 +40,7 @@
 - 🌐 **Custom Docker network** with dedicated subnet and internal DNS
 - 🩺 **Comprehensive health checks**
 - 🔧 **Development hot reload and debug** via override config
-- 📚 **Full documentation** on setup, secrets, CI/backup, troubleshooting, prod tips
+- 📚 **Full documentation** on setup, secrets, CI/backup, troubleshooting, and production tips
 
 ---
 
@@ -86,10 +86,10 @@ echo "YourStrongAppPassword456!" > secrets/db_app_password.txt
 echo "YourJWTSecretKeyHere!" > secrets/app_secret.txt
 # (Linux/macOS only) chmod 600 secrets/*.txt
 ```
-> **Obs.:** No Windows não precisa `chmod`. Só confira que os secrets não têm quebras extras.
+> **Note:** On Windows, do NOT run `chmod`. Just make sure your secrets contain no extra line breaks.
 
 #### 🅱️ Environment Variables (**for development**)
-Edite `.env` e descomente:
+Edit `.env` and uncomment:
 ```env
 DB_PASSWORD=your_admin_password
 APP_SECRET=your_app_secret
@@ -97,14 +97,14 @@ APP_SECRET=your_app_secret
 
 ### 3️⃣ Build and Run
 
-Para ambiente **desenvolvimento** (com hot reload, override):  
+For **development** (with hot reload, override):  
 ```bash
 docker-compose up -d --build
 docker-compose logs -f
 docker-compose ps
 ```
 
-Para rodar realmente em **produção** (apenas config principal):
+For **production only** (main configuration only):
 ```bash
 docker-compose -f docker-compose.yml up -d --build
 ```
@@ -151,15 +151,15 @@ secrets:
 
 ## 🧑‍💻 Development & Hot Reload
 
-- Usa `docker-compose.override.yml` para:
-  - Montagem "read-write" do código e hot-reload via nodemon
-  - Porta debug exposta (`9229`)
-- Configuração via env e fallback automático
+- Uses `docker-compose.override.yml` for:
+  - Read-write code mount and hot-reload via nodemon
+  - Exposes debug port (`9229`)
+- All config/fallback works out of the box
 
 ```bash
 docker-compose up -d
 docker-compose logs -f app
-# App recarrega em alterações no código (modo dev)
+# App reloads on code change (in dev)
 ```
 
 ---
@@ -168,19 +168,19 @@ docker-compose logs -f app
 
 ### PostgreSQL
 
-- 🧑‍🎓 **Usuários distintos admin/app** (privilegiamento mínimo)
-- 📚 **Schema isolado:** só appuser acessa `app_schema`
-- 🔐 **GRANTs restritos** & revoga tudo do `PUBLIC`
-- 🔑 **SCRAM-SHA-256** para autenticação
+- 🧑‍🎓 **Distinct admin/app DB users** (least-privilege)
+- 📚 **Schema isolation:** only app user can access `app_schema`
+- 🔐 **Restricted GRANTs** & revoked `PUBLIC`
+- 🔑 **SCRAM-SHA-256** authentication
 
 ### Docker
 
-- 🤖 **Containers não root** (Node e DB)
-- 📚 **Mount read-only** para código da app (exceto override/dev)
-- 🌐 **Rede customizada** (`app-network`, subnet fixa)
-- 💾 **Volumes persistentes**
-- 🩺 **Healthchecks** no app & banco
-- 💪 **Resource limits** ajustáveis
+- 🤖 **Non-root** containers (Node and DB)
+- 📚 **Read-only** code mount (except override/dev)
+- 🌐 **Custom network** (`app-network`, fixed subnet)
+- 💾 **Persistent volumes**
+- 🩺 **Healthchecks** on app & database
+- 💪 **Resource limits** configurable
 
 ---
 
@@ -223,7 +223,7 @@ docker-compose up -d
 | Start               | `docker-compose up -d`                                          |
 | Stop                | `docker-compose down`                                           |
 | Stop + clean        | `docker-compose down -v`                                        |
-| Stop+vol+imagem     | `docker-compose down -v --rmi all`                              |
+| Stop + volume + images| `docker-compose down -v --rmi all`                            |
 | Build               | `docker-compose build --no-cache`                               |
 | Status              | `docker-compose ps`                                             |
 | Logs (all/app)      | `docker-compose logs -f [app|postgres]`                         |
@@ -242,12 +242,12 @@ docker-compose up -d
 
 | Issue                 | How to Diagnose & Solve                                                            |
 |-----------------------|------------------------------------------------------------------------------------|
-| **DB Connection**     | `docker-compose logs postgres` &rarr; `exec postgres pg_isready -U adminuser`      |
+| **DB Connection**     | `docker-compose logs postgres` → `exec postgres pg_isready -U adminuser`           |
 | **App Not Starting**  | `docker-compose logs app`, check `/health`, restart if needed                     |
-| **Permissions**       | No Windows: ignore `chmod 600`/`ls -la`. Linux/macOS: siga instruções              |
-| **Port in use**       | `sudo lsof -i :3000` or `:5432` \| change ports in `.env` if needed               |
-| **Debug Mode**        | `docker-compose up` (foreground), `docker-compose logs --tail=100 -f`             |
-| **Container details** | `docker inspect $(docker-compose ps -q app)`                                      |
+| **Permissions**       | On Windows: ignore `chmod 600`/`ls -la`. On Linux/macOS: follow instructions.      |
+| **Port in use**       | `sudo lsof -i :3000` or `:5432` \| change ports in `.env` if needed                |
+| **Debug Mode**        | `docker-compose up` (foreground), `docker-compose logs --tail=100 -f`              |
+| **Container details** | `docker inspect $(docker-compose ps -q app)`                                       |
 
 ---
 
