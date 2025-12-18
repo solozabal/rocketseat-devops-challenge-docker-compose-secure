@@ -51,17 +51,23 @@ project/
 ├── app/
 │   ├── src/
 │   │   └── index.js
-│   ├── package.json
+│   ├── .dockerignore
 │   ├── Dockerfile
-│   └── .dockerignore
-├── docker-compose.yml
-├── docker-compose.override.yml
-├── .env.example
-├── init-db.sh
+│   ├── package.json
+│   └── package-lock.json
+├── assets/
+│   └── screencapture-rocketseat-devops-challenge-02.png
 ├── secrets/
 │   ├── db_app_password.txt
 │   ├── db_admin_password.txt
 │   └── app_secret.txt
+├── .env
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── docker-compose.override.yml
+├── init-db.sh
+├── LICENSE
 └── README.md
 ```
 
